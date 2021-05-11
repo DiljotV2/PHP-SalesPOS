@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>visualization</title>
 </head>
+<script src = "https://cdn.jsdelivr.net/npm/chart.js@3.2.1/dist/chart.min.js"></script>
 <body>
     <header>
         <h2>
@@ -23,7 +24,7 @@
 
      <table>
         <tr>
-            <th width = "20%"><h2>PREDICTION NEXT MONTH</h2></th>
+            <th width = "20%"><h2>TOTAL TILL NOW IN THIS MONTH</h2></th>
             <th width = "40%"><h2>PREDICTION BY THE END OF THIS MONTH</h2></th>
         </tr>
         <tr>
@@ -32,27 +33,295 @@
         </tr>
     
     </table>
-    <button>Linear</button>
-    <button>Horizontal</button>
-    <button>Bar</button>
-    <button>Scatter</button>
+    <!--<form action="" method = "POST">-->
+        <button id = "sales_visual_button" name = "sales_button" onClick = "onSalesVisualClick()">Sales</button>
+        <button id = "inventory_visual_button" name = "inventory_visual_button" >Inventory</button>
+        <br><br><br>
+        <p id = "buttons" name = "buttons"></p>
+
+    <!--</form>-->
+    <?php
+        //echo "Php being used??";
+        //it is used for creating a dictionary
+        $conn = @mysqli_connect ("localhost","root","root","login");	// Log in and use database
+	if ($conn) { // check is database is avialable for use
+		$query = "Select * from salesdata";		// query is assigned here
+		$result = mysqli_query ($conn, $query);
+        $monthlyDataArray = array();
+        $keylist = array();
+		while($rows = $result->fetch_assoc()){
+            foreach($monthlyDataArray as $x => $val) {
+                array_push($keylist, $x);
+            }
+
+            if (in_array("".$rows['Date']."", $keylist))
+            {
+                $monthlyDataArray["".$rows['Date'].""] += "".$rows['TotalPrice']."";
+            }
+            else
+            {
+                $monthlyDataArray += array("".$rows['Date']."" => "".$rows['TotalPrice']."");
+            }
+        }
+        /*echo "<script>\n";
+        echo "console.log('->', ".json_encode($monthlyDataArray).");";
+        echo "</script>";*/
+
+		mysqli_close ($conn);					// Close the database connect
+	} else {
+		echo "<p>Unable to connect to the database.</p>";
+	}
+    ?>
+    
     <p>There will be graphs</p>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
+    <canvas id = "chart" width = "50" height = "50"></canvas>
+    <script>
+
+    function onSalesVisualClick(){
+        console.log("onSalesVisualClick is being used");
+        var buttons = "        <button id = 'weekly_visual_button' name = 'weekly_visual_button'>Weekly</button>";
+        buttons += "     <button id = 'monthly_visual_button' name = 'monthly_visual_button'>Monthly</button>";
+        buttons += "     <button id = 'yearly_visual_button' name = 'yearly_visual_button'>Yearly</button>";
+		document.getElementById("buttons").innerHTML = buttons;
+    }
+
+    //returnCurrentMonthDatesArrayInString();
+    var something = <?php echo json_encode($monthlyDataArray); ?>;
+    console.log(something);
+    
+    /*var monthlyArrayHahaa = salesDataInArrayAccordingToKeyMonthValues(something);
+    var monthlyKeys = Object.keys(monthlyArrayHahaa);
+    var monthlyValues = Object.values(monthlyArrayHahaa);
+
+    var weeklyArrayHahaa = salesDataInArrayAccordingToKeyWeekValues(something);
+    var weeklyKeys = Object.keys(weeklyArrayHahaa);
+    var weeklyValues = Object.values(weeklyArrayHahaa);*/
+
+    var yearlyArrayHahaa = salesDataInArrayAccordingToKeyYearValues(something);
+    var yearlyKeys = Object.keys(yearlyArrayHahaa);
+    var yearlyValues = Object.values(yearlyArrayHahaa);
+
+    //console.log(monthlyKeys);
+    //console.log(monthlyValues);
+
+
+    //showChart("This Month sales Chart",monthlyKeys, monthlyValues,  "A$");//this works
+    //showChart("This Week sales Chart",weeklyKeys, weeklyValues,  "A$");//this works
+    showChart("This Year sales Chart", yearlyKeys, yearlyValues, "A$");//this works
+
+
+    function returnCurrentMonthDatesArrayInString(){
+        var date = new Date();
+        var month = date.getMonth();
+        date.setDate(1);
+        var all_days = [];
+        while (date.getMonth() == month) {
+            var d = date.getFullYear() + '-' + date.getMonth().toString().padStart(2, '0') + '-' + date.getDate().toString().padStart(2, '0');
+            all_days.push(d);
+            date.setDate(date.getDate() + 1);
+        }
+        console.log(all_days);
+        return all_days;
+
+    } 
+
+    function dummyArrayofNumbers(){
+        var numbers = [];
+        var i = 0;
+        while (i != 31 ){
+            numbers.push(i);
+            i++;
+        }
+        return numbers;
+    }
+
+    function returnFirstAndLastDateofWeek(monthDay, weekday){
+        var monthDayStart = 0;
+        var monthDayEnd = 0;
+
+        //console.log("This is monthDay");
+        //console.log(monthDay);
+
+        //console.log("This is weekday");
+        //console.log(weekday);
+
+        switch (weekday) {
+            case "Sunday":
+                monthDayStart = parseInt(monthDay) - 6;
+                monthDayEnd = parseInt(monthDay);
+                break;
+            case "Monday":
+                monthDayStart = parseInt(monthDay);
+                monthDayEnd = parseInt(monthDay) + 6;
+                break;
+            case "Tuesday":
+                monthDayStart = parseInt(monthDay) - 1;
+                monthDayEnd = parseInt(monthDay) + 5;
+                break;
+            case "Wednesday":
+                monthDayStart = parseInt(monthDay) - 2;
+                monthDayEnd = parseInt(monthDay) + 4;
+                break;
+            case "Thursday":
+                monthDayStart = parseInt(monthDay) - 3;
+                monthDayEnd = parseInt(monthDay) + 3;
+                break;
+            case "Friday":
+                monthDayStart = parseInt(monthDay) - 2;
+                monthDayEnd = parseInt(monthDay) + 4;
+                break;
+            case "Saturday":
+                monthDayStart = parseInt(monthDay) - 1;
+                monthDayEnd = parseInt(monthDay) + 5;
+                break;
+
+            default:
+                console.log("Nothing much");
+            }
+
+        return [monthDayStart, monthDayEnd];
+    }
+
+    function salesDataInArrayAccordingToKeyWeekValues(salesDateValueArray){
+        var thisWeekArray =[];
+        
+        for (const [key, value] of Object.entries(salesDateValueArray)) {
+            const date = key;
+            const parts = date.split("-");
+            
+
+            var monthDay = parts[2];
+            var month = parts[1];
+            var year = parts[0];
+
+            console.log("Hey its diljot");
+
+            
+
+            var notCurrentDate = new Date(date);
+            var notCurrentWeekDay = notCurrentDate.toLocaleString("default", { weekday: "long" });
+            
+            var currentDate = new Date();
+            var currentWeekDay = currentDate.toLocaleString("default", { weekday: "long" });
+            var cur_month = currentDate.getMonth() + 1;
+            var cur_year = currentDate.getFullYear();
+
+            //im thinking of making week as monday to sunday where monday is first day and sunday is last day of week -XD Diljot
+
+            notCurrentDateWeek = returnFirstAndLastDateofWeek(monthDay, notCurrentWeekDay);
+            currentDateWeek = returnFirstAndLastDateofWeek(currentDate.getDate(), currentWeekDay);
+            //console.log("hey its notcusrreent" + notCurrentDateWeek);
+            //console.log("hey its current" + currentDateWeek);
+            
+
+            if ((cur_month == month && year == cur_year) && (currentDateWeek[0] == notCurrentDateWeek[0] && currentDateWeek[1] == notCurrentDateWeek[1])) {
+                thisWeekArray[key] = value;
+            }
+            /*else{
+                console.log("what its still not same y?");
+            }*/
+        }
+
+        console.log(thisWeekArray);
+        return thisWeekArray;
+        
+    }
+
+    function salesDataInArrayAccordingToKeyMonthValues(salesDateValueArray){
+        var thisMonthArray = [];
+        
+        for (const [key, value] of Object.entries(salesDateValueArray)) {
+            const date = key;
+            const parts = date.split("-");
+
+            var month = parts[1];
+            var year = parts[0];
+
+            var currentdate = new Date();
+            var cur_month = currentdate.getMonth() + 1;
+            var cur_year = currentdate.getFullYear();
+
+            if (cur_month == month && year == cur_year) {
+                thisMonthArray[key] = value;
+            } 
+        }
+
+        
+        //console.log("thisMonthArray");
+        //console.log(thisMonthArray);
+        return thisMonthArray;
+        
+    }
+
+    function salesDataInArrayAccordingToKeyYearValues(salesDateValueArray){
+        var thisYearArray = [];
+        
+        for (const [key, value] of Object.entries(salesDateValueArray)) {
+            const date = key;
+            const parts = date.split("-");
+
+            var year = parts[0];
+
+            var currentdate = new Date();
+            var cur_year = currentdate.getFullYear();
+
+            if (year == cur_year) {
+                thisYearArray[key] = value;
+            } 
+        }
+
+        
+        //console.log("thisYearArray");
+        //console.log(thisYearArray);
+        return thisYearArray;
+    }
+
+    function showChart(legend, labels_for_chart, values_for_data, tick){
+        var ctx = document.getElementById('chart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels:  labels_for_chart,//parenthesis this too
+                datasets: [{
+                    label: legend,
+                    data: values_for_data,//parenthesis as wwell
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks:{
+                            callback: function(value, index, values){
+                                return tick + value;
+                            }
+                        }
+                        
+                    }
+                }
+            }
+        });
+    }
+        
+    </script>
+    
+    
 </body>
 </html>
