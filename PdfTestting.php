@@ -1,26 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Report</title>
-</head>
-<body>
-     <header>
-        <h2>
-            <nav>
-                <a href = "/Dashboard.php" id = "dashboard">Dashboard</a>
-                <a href = "/Sales.php" id = "sales">Sales</a>
-                <a href = "/Inventory.php" id = "inventory">Inventory</a>
-                <a href = "/Visualization.php" id = "visualization">Visualization</a>
-                <a href = "/Report.php" id = "reports">Reports</a>
-	        </nav>
-        </h2>
-    <header>
-    <h1>REPORTS</h1>
-
-    <?php
+<?php
 require('fpdf.php');
 
 
@@ -125,12 +103,5 @@ $pdf->FancyTable($salesHeader, $salesData);
 /*for($i=1;$i<=40;$i++)
 	$pdf->Cell(0,10,'Printing line number '.$i,0,1);
 */
-$output = $pdf->Output('', 'S');
-$output = base64_encode($output);
+$pdf->Output();
 ?>
-
-    <div class = "container">
-        <embed src="data:application/pdf;base64,<?php echo $output ?>" type='application/pdf' margin = "center" width = "70%" height = "600px">
-    </div>
-</body>
-</html>

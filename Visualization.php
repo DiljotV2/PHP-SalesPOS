@@ -35,7 +35,7 @@
     </table>
     <!--<form action="" method = "POST">-->
         <button id = "sales_visual_button" name = "sales_button" onClick = "onSalesVisualClick()">Sales</button>
-        <button id = "inventory_visual_button" name = "inventory_visual_button" >Inventory</button>
+        <button id = "inventory_visual_button" name = "inventory_visual_button" onClick = "onInventoryVisualClick()" >Inventory</button>
         <br><br><br>
         <p id = "buttons" name = "buttons"></p>
 
@@ -67,6 +67,17 @@
         echo "console.log('->', ".json_encode($monthlyDataArray).");";
         echo "</script>";*/
 
+        $sql = "Select * from inventorydata";
+		$result_inventory = mysqli_query ($conn, $sql);
+        $inventoryDataArray = array();
+        while($inventory_rows = $result_inventory->fetch_assoc()){
+            $inventoryDataArray += array("".$inventory_rows['Name']."" => array("".$inventory_rows['Stocks'].", ".$inventory_rows['PricePerProduct'].""));
+        }
+
+        echo "<script>\n";
+        echo "console.log('->', ".json_encode($inventoryDataArray).");";
+        echo "</script>";
+
 		mysqli_close ($conn);					// Close the database connect
 	} else {
 		echo "<p>Unable to connect to the database.</p>";
@@ -77,37 +88,133 @@
     <canvas id = "chart" width = "50" height = "50"></canvas>
     <script>
 
+    var chartInUse;
+    var inventoryArray = <?php echo json_encode($inventoryDataArray); ?>;
+    console.log("This is inventory array");
+    console.log(inventoryArray);
+
+
+    var something = <?php echo json_encode($monthlyDataArray); ?>;
+    console.log(something);
+
+
+    function destroyChart(chart){
+        chart.destroy();
+    }
+
     function onSalesVisualClick(){
         console.log("onSalesVisualClick is being used");
-        var buttons = "        <button id = 'weekly_visual_button' name = 'weekly_visual_button'>Weekly</button>";
-        buttons += "     <button id = 'monthly_visual_button' name = 'monthly_visual_button'>Monthly</button>";
-        buttons += "     <button id = 'yearly_visual_button' name = 'yearly_visual_button'>Yearly</button>";
+        var buttons = "        <button id = 'weekly_visual_button' name = 'weekly_visual_button' onClick = 'onWeeklyVisualClick()' >Weekly</button>";
+        buttons += "     <button id = 'monthly_visual_button' name = 'monthly_visual_button' onClick = 'onMonthlyVisualClick()' >Monthly</button>";
+        buttons += "     <button id = 'yearly_visual_button' name = 'yearly_visual_button' onClick = 'onYearlyVisualClick()'>Yearly</button>";
 		document.getElementById("buttons").innerHTML = buttons;
     }
 
-    //returnCurrentMonthDatesArrayInString();
-    var something = <?php echo json_encode($monthlyDataArray); ?>;
-    console.log(something);
+    function onInventoryVisualClick(){
+        console.log("onInventoryVisualClick is being used");
+        var buttons = "     <button id = 'stocks_visual_button' name = 'stocks_visual_button' onClick = 'onStockVisualClick()' >Stocks</button>";
+        buttons += "     <button id = 'pricePerProduct_visual_button' name = 'pricePerProduct_visual_button' onClick = 'onPricePerProductVisualClick()' >Price Per Product</button>";
+		document.getElementById("buttons").innerHTML = buttons;
     
-    /*var monthlyArrayHahaa = salesDataInArrayAccordingToKeyMonthValues(something);
-    var monthlyKeys = Object.keys(monthlyArrayHahaa);
-    var monthlyValues = Object.values(monthlyArrayHahaa);
+    }
 
-    var weeklyArrayHahaa = salesDataInArrayAccordingToKeyWeekValues(something);
-    var weeklyKeys = Object.keys(weeklyArrayHahaa);
-    var weeklyValues = Object.values(weeklyArrayHahaa);*/
+    function onStockVisualClick(){
+        if(chartInUse){
+            destroyChart(chartInUse);
+        }
 
-    var yearlyArrayHahaa = salesDataInArrayAccordingToKeyYearValues(something);
-    var yearlyKeys = Object.keys(yearlyArrayHahaa);
-    var yearlyValues = Object.values(yearlyArrayHahaa);
+        console.log("onStockVisualClick is being used");
+
+
+        var somehtin_else = inventoryNameStockArray(inventoryArray);
+        var nameStockKeys = Object.keys(somehtin_else);
+        var nameStockValues = Object.values(somehtin_else);
+
+        chartInUse = showChart("Product's Stocks", nameStockKeys, nameStockValues,  "");//this works
+
+    }
+
+    function inventoryNameStockArray(inventory_array){
+
+        var nameStockArray = [];
+        for (const [key, value] of Object.entries(inventory_array)) {
+            var stock = value[0].split(",");
+            //console.log("This is some stuff " + stock[0] + "in the spacing");
+            nameStockArray[key] = stock[0];
+        }
+
+        return nameStockArray;
+    }
+
+
+    function onPricePerProductVisualClick(){
+        if(chartInUse){
+            destroyChart(chartInUse);
+        }
+
+        var array = inventoryNamePricePerProductArray(inventoryArray);
+        var namePricePerProductKeys = Object.keys(array);
+        var namePricePerProductValues = Object.values(array);
+
+        chartInUse = showChart("Price Per Product", namePricePerProductKeys, namePricePerProductValues,  "A$");//this works
+
+    }
+
+    function inventoryNamePricePerProductArray(inventory_array){
+        var namePricePerProductArray = [];
+        for (const [key, value] of Object.entries(inventory_array)) {
+            var pricePerProduct = value[0].split(",");
+            namePricePerProductArray[key] = pricePerProduct[1];
+        }
+
+        return namePricePerProductArray;
+    }
+
+    function onWeeklyVisualClick(){
+        if(chartInUse){
+            destroyChart(chartInUse);
+        }
+		var weeklyArrayHahaa = salesDataInArrayAccordingToKeyWeekValues(something);
+        var weeklyKeys = Object.keys(weeklyArrayHahaa);
+        var weeklyValues = Object.values(weeklyArrayHahaa);
+
+        chartInUse = showChart("This Week sales Chart",weeklyKeys, weeklyValues,  "A$");//this works
+
+    }
+
+    function onMonthlyVisualClick(){
+        if(chartInUse){
+            destroyChart(chartInUse);
+        }
+        var monthlyArrayHahaa = salesDataInArrayAccordingToKeyMonthValues(something);
+        var monthlyKeys = Object.keys(monthlyArrayHahaa);
+        var monthlyValues = Object.values(monthlyArrayHahaa);
+
+        chartInUse = showChart("This Month sales Chart",monthlyKeys, monthlyValues,  "A$");//this works
+
+    }
+
+    function onYearlyVisualClick(){
+        if(chartInUse){
+            destroyChart(chartInUse);
+        }
+        var yearlyArrayHahaa = salesDataInArrayAccordingToKeyYearValues(something);
+        var yearlyKeys = Object.keys(yearlyArrayHahaa);
+        var yearlyValues = Object.values(yearlyArrayHahaa);
+
+        chartInUse = showChart("This Year sales Chart", yearlyKeys, yearlyValues, "A$");//this works
+
+    }
+
+    //returnCurrentMonthDatesArrayInString();
+    
+
+    
 
     //console.log(monthlyKeys);
     //console.log(monthlyValues);
 
 
-    //showChart("This Month sales Chart",monthlyKeys, monthlyValues,  "A$");//this works
-    //showChart("This Week sales Chart",weeklyKeys, weeklyValues,  "A$");//this works
-    showChart("This Year sales Chart", yearlyKeys, yearlyValues, "A$");//this works
 
 
     function returnCurrentMonthDatesArrayInString(){
@@ -318,6 +425,8 @@
                 }
             }
         });
+
+        return myChart;
     }
         
     </script>
