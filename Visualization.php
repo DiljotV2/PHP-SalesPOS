@@ -85,7 +85,10 @@
     ?>
     
     <p>There will be graphs</p>
-    <canvas id = "chart" width = "50" height = "50"></canvas>
+    <div id = "chartDiv" width = "" height = "400px"><!--width and height doesnt work with this chart.js-->
+            <canvas id = "chart"></canvas>
+    </div>
+    
     <script>
 
     var chartInUse;
@@ -385,6 +388,7 @@
 
     function showChart(legend, labels_for_chart, values_for_data, tick){
         var ctx = document.getElementById('chart').getContext('2d');
+        ctx.width = "400";
         var myChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -412,6 +416,10 @@
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                responsiveAnimationDuration: 0,
+                onResize: null,
                 scales: {
                     y: {
                         beginAtZero: true,
