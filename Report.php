@@ -36,9 +36,19 @@ class PDF extends FPDF
         if ($conn) { // check is database is avialable for use
             $query = "Select * from salesdata";		// query is assigned here
             $result = mysqli_query ($conn, $query);
-            while($rows = $result->fetch_assoc()){
-                $line = array($rows['SaleID'], $rows['Date'], $rows['ItemID'], $rows['Name'], $rows['PricePerProduct'], $rows['Stocks'], $rows['TotalPrice']);
-                array_push($data, $line);
+            while($rows = $result->fetch_assoc()){  
+                $thisDate =  $rows['Date'];
+                //$checkItisThisMonth = 
+                //this_month($thisDate);
+                $dateParts = explode("-", $thisDate);
+                $currentDateParts = explode("-", date("Y-m-d"));
+
+                if($dateParts[0] == $currentDateParts[0] && $dateParts[1] == $currentDateParts[1]){
+                    $line = array($rows['SaleID'], $rows['Date'], $rows['ItemID'], $rows['Name'], $rows['PricePerProduct'], $rows['Stocks'], $rows['TotalPrice']);
+                    array_push($data, $line);
+                }
+                
+                
             }
             /*echo "<script>\n";
             echo "console.log('->', ".json_encode($data).");";
@@ -60,7 +70,7 @@ class PDF extends FPDF
         // Move to the right
         $this->Cell(80);
         // Title
-        $this->Cell(30,10,'SALES MONTHLY RECORDS', 0,0,'C');
+        $this->Cell(30,10, ''.strtoupper(date('F')).' SALES RECORD', 0,0,'C');
         // Line break
         $this->Ln(20);
     }
@@ -129,8 +139,8 @@ $output = $pdf->Output('', 'S');
 $output = base64_encode($output);
 ?>
 
-    <div class = "container">
-        <embed src="data:application/pdf;base64,<?php echo $output ?>" type='application/pdf' margin = "center" width = "70%" height = "600px">
+    <div class = "container"  >
+        <embed src="data:application/pdf;base64,<?php echo $output ?>" type='application/pdf' style = 'margin: auto;' width = "70%" height = "600px">
     </div>
 </body>
 </html>

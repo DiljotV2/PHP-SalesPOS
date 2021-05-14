@@ -1,10 +1,6 @@
 <?php
-        $user = 'root';
-        $password = 'root';
-        $db = 'login';
-        $host = 'localhost';
-        $port = 3306;
-        $mysqli = new mysqli("localhost","root","root","login");
+        require "Credentials.php";
+        $mysqli = new mysqli($host, $user, $password, $db);
 
         // Check connection
         if ($mysqli -> connect_errno) {
