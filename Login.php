@@ -75,24 +75,35 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Login</title>
+	<link href="LoginDesign.css" rel="stylesheet" />
 </head>
 <body>
-    <h1>WELCOME TO PHP SALES POS</h1>
-    <h1>LOGIN PAGE</h1>
-    
-    <form action="#" method = "POST">
-    <label for="username">Username</label>
-    <input type="text" id = "username" name = "username"/>
-    </br></br>
-    <label for="password">Password</label>
-    <input type="password" name = "password" id = "password">
-    <br><br><br>
-    <button name = "login" id = "login">Login</button>
-    </form>
-    <nav>
-		<a href = "" id = "fPassword">Forgot Password?</a>
-		<a href = "" id = "cAccound">Create Account</a>
-	</nav>
+    <div class = "background">
+        <div class = "board">
+            <div class = "WelcomeTitle">
+                <img id = "logo" src="" alt="Logo" width = "5%" height = "5%">
+                <h2>WELCOME TO PHP SALES POS</h2>
+                <h4>Please login to your account</h4>
+            </div>
+            
+            <div class = "userPassword">
+               <form action="#" method = "POST">
+                    <input type="text" id = "username" name = "username" placeholder = "Username"/>
+                    </br></br>
+                    <input type="password" name = "password" id = "password" placeholder = "Password">
+                    <a href = "" id = "fPassword">Forgot?</a>
+                    
+                    <br><br><br>
+                    <button name = "login" id = "login">Login</button>
+                    </form>
+                    <nav>
+                        <a href = "" id = "cAccound">Create Account</a>
+                    </nav>
+                    </form>
+            </div>
+            
+        </div>
+    </div>
 </body>
 </html>
