@@ -96,7 +96,6 @@
                     
                     <br><br><br>
                     <button name = "login" id = "login">Login</button>
-                    </form>
                     <nav>
                         <a href = "" id = "cAccound">Create Account</a>
                     </nav>

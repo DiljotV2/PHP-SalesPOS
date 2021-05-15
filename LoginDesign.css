@@ -1,5 +1,5 @@
 body {
-  background-color: rgb(92, 85, 134);
+  background-color: rgb(47, 41, 134);
   height: 100%;
   width: 100%;
 }
@@ -50,8 +50,10 @@ h2 {
 }
 
 h4 {
-  margin-left: 10%;
-  margin-top: 20%;
+  margin: 0;
+  position: absolute;
+  top: 60%;
+  left: 2%;
   text-align: left;
   color: grey;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -68,6 +70,7 @@ h4 {
   -ms-transform: translate(-40%, -70%);
   transform: translate(-40%, -70%);
 }
+
 input {
   width: 80%;
   height: 50%;
@@ -82,6 +85,7 @@ input {
 
 #username {
   background-color: rgb(17, 11, 104);
+  color: white;
   border-top-style: hidden;
   border-right-style: hidden;
   border-left-style: hidden;
@@ -90,6 +94,7 @@ input {
 
 #password {
   margin-top: 1%;
+  color: white;
   background-color: rgb(17, 11, 104);
   border-top-style: hidden;
   border-right-style: hidden;
