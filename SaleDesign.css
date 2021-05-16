@@ -1,0 +1,116 @@
+body {
+  background-color: rgb(47, 41, 134);
+  height: 100%;
+  width: 100%;
+}
+
+.board {
+  margin-top: 10%;
+  margin-bottom: -100%;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  background-color: rgb(17, 11, 104);
+  width: 90%;
+  max-width: 90%;
+}
+nav {
+  margin: 0;
+  position: absolute;
+  background-color: rgb(17, 11, 104);
+  width: 100%;
+  max-width: 100%;
+}
+
+.links {
+  margin: auto;
+  width: 50%;
+}
+
+.navLinks {
+  /*margin-top: -1%;
+  margin-left: -60px;*/
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-decoration: none;
+  color: white;
+  border: none;
+  padding: 5px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 80%;
+  cursor: pointer;
+}
+
+.navLinks:hover {
+  background-color: rgb(16, 12, 80);
+}
+
+#sales {
+  background-color: rgb(11, 4, 66);
+}
+
+button {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-decoration: none;
+  background-color: rgb(70, 64, 160);
+  color: white;
+  border: none;
+  padding: 5px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 110%;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#insert:hover {
+  background-color: rgb(19, 16, 71);
+}
+#insert:visited {
+  background-color: rgb(3, 1, 37);
+}
+
+::placeholder {
+  color: white;
+}
+
+input {
+  background-color: rgb(17, 11, 104);
+  color: white;
+  border-top-style: hidden;
+  border-right-style: hidden;
+  border-left-style: hidden;
+  border-bottom-style: hidden;
+  height: 18px;
+  width: 10em;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 8px 1px;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 100%;
+}
+
+.table-header {
+  opacity: 0.7;
+  background-color: grey;
+  border: none;
+}
+
+th {
+  border: none;
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+  border-radius: 5px;
+}
+td {
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
