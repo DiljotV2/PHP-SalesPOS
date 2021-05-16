@@ -5,21 +5,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sales</title>
+	<link href="SaleDesign.css" rel="stylesheet" />
 </head>
 <body>
      <header>
         <h2>
             <nav>
-                <a href = "/Dashboard.php" id = "dashboard">Dashboard</a>
-                <a href = "/Sales.php" id = "sales">Sales</a>
-                <a href = "/Inventory.php" id = "inventory">Inventory</a>
-                <a href = "/Visualization.php" id = "visualization">Visualization</a>
-                <a href = "/Report.php" id = "reports">Reports</a>
+				<div class = "links">
+					<a href = "/Dashboard.php" id = "dashboard" class = "navLinks">Dashboard</a>
+					<a href = "/Sales.php" id = "sales" class = "navLinks">Sales</a>
+					<a href = "/Inventory.php" id = "inventory" class = "navLinks">Inventory</a>
+					<a href = "/Visualization.php" id = "visualization" class = "navLinks">Visualization</a>
+					<a href = "/Report.php" id = "reports" class = "navLinks">Reports</a>
+				</div>
 	        </nav>
         </h2>
     <header>
     <h1>SALES</h1>
-    <table>
+	<div class = "board">
+		<table>
 	<tr class = "table-header">
 		<th class = "" width = '5%' style = "text-align: center;">SaleId</th>
 		<th class = "" width = '10%' style = "text-align: center;">Date</th>
@@ -31,10 +35,10 @@
 	</tr>
 <?php
 	
-	//require_once "settings.php";	// Load MySQL log in credentials
-	$conn = @mysqli_connect ("localhost","root","root","login");	// Log in and use database
+	require "Credentials.php";
+    $conn = new mysqli($host, $user, $password, $db);	// Log in and use database
 	if ($conn) { // check is database is avialable for use
-		$query = "Select * from salesdata";		// query is assigned here
+		$query = "Select * from salesdata Order by SaleID DESC";		// query is assigned here
 		$result = mysqli_query ($conn, $query);
 		while($rows = $result->fetch_assoc()){
 			echo "<tr class = 'table-row'><td class = '' width = '5%' style = 'text-align: center;'>". $rows["SaleID"] ."</td><td class = '' width = '10%' style = 'text-align: center;'>". $rows["Date"] .  "</td><td class = '' width = '10%' style = 'text-align: center;'>". $rows["ItemID"] . "</td><td class = '' width = '10%' style = 'text-align: center;'>". $rows["Name"]."</td><td class = '' width = '10%' style = 'text-align: center;'>".$rows["PricePerProduct"];
@@ -48,9 +52,11 @@
 	
 	
 ?>
-	<button name = 'Insert' id = 'insert' onclick = 'insertFunction()'>Insert</button>
-	<button name = 'Delete' id = 'delete' onclick = 'deleteFunction()'>Delete</button>
-	<button name = 'Update' id = 'update' onclick = 'updateFunction()'>Update</button>
+	</div>
+    
+	<button name = 'Insert' id = 'insert' onclick = 'insertFunction()'>INSERT</button>
+	<button name = 'Delete' id = 'delete' onclick = 'deleteFunction()'>DELETE</button>
+	<button name = 'Update' id = 'update' onclick = 'updateFunction()'>UPDATE</button>
 	<p id="demo"></p>
 	
 	<script>
@@ -61,27 +67,20 @@
 			
 		}
 		function insertFunction() {
+			revertButtonColors();
+			document.getElementById("insert").style.backgroundColor = 'rgb(17, 11, 104)';
 			var table = "<form action='' method = 'POST'>";
-				table += "<label name = 'insert'><h2>INSERT SALES</h2></label>";
 				table += "<table>";
-				table += "	<tr>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>Date</th>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>ItemID</th>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>Name</th>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>Price Per Product</th>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>Stocks</th>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>Total Price</th>";
-				table += "	</tr>";
-				table += "	<tr>";
-				table += "		<td><input type='date' width = '10%' name = 'date'></td>";
-				table += "		<td><input type='text' width = '10%' name = 'itemid'></td>";
-				table += "		<td><input type='text' width = '10%' name = 'name'></td>";
-				table += "		<td><input type='number' step='0.01' width = '10%' name = 'price_per_product'></td>";
-				table += "		<td><input type='number' width = '10%' name = 'stocks'></td>";
-				table += "		<td><input type='number' step='0.01' width = '10%' name = 'total_price'></td>";
+				table += "	<tr class = 'insertFields'>";
+				table += "		<td><input type='date' width = '10%' name = 'date' placeholder = 'Date'></td>";
+				table += "		<td><input type='text' width = '10%' name = 'itemid' placeholder = 'ItemId'></td>";
+				table += "		<td><input type='text' width = '10%' name = 'name'placeholder = 'Name'></td>";
+				table += "		<td><input type='number' step='0.01' width = '10%' name = 'price_per_product' placeholder = 'Price Per Product'></td>";
+				table += "		<td><input type='number' width = '10%' name = 'stocks' placeholder = 'Stocks'></td>";
+				table += "		<td><input type='number' step='0.01' width = '10%' name = 'total_price' placeholder = 'Total Price'></td>";
+				table += "		<td><button name = 'submit_insert' id = 'submit' onClick = 'refreshPage()'>Submit</button></td>";
 				table += "	</tr>";
 				table += "</table>";
-				table += "<button name = 'submit_insert' id = 'submit' onClick = 'refreshPage()'>Submit</button>";
 				table += "<input type='hidden' name = 'submit_message' id = 'submit_message' value = 'No'>";
 				table += "<input type='hidden' name = 'message' id = 'message' value = 'Insert'>";
 				table += "</form>";
@@ -90,29 +89,21 @@
 		}
 
 		function updateFunction() {
+			revertButtonColors();
+			document.getElementById("update").style.backgroundColor = 'rgb(17, 11, 104)';
 			var table = "<form action='' method = 'POST'>";
-				table += "<label name = 'insert'><h2>UPDATE SALES</h2></label>";
 				table += "<table>";
 				table += "	<tr>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>SaleId</th>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>Date</th>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>ItemID</th>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>Name</th>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>Price Per Product</th>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>Stocks</th>";
-				table += "		<th class = '' width = '10%' style = 'text-align: center;'>Total Price</th>";
-				table += "	</tr>";
-				table += "	<tr>";
-				table += "		<td><input type='number' width = '10%' name = 'salesid'></td>";
-				table += "		<td><input type='date' width = '10%' name = 'date'></td>";
-				table += "		<td><input type='text' width = '10%' name = 'itemid'></td>";
-				table += "		<td><input type='text' width = '10%' name = 'name'></td>";
-				table += "		<td><input type='number' step='0.01' width = '10%' name = 'price_per_product'></td>";
-				table += "		<td><input type='number' width = '10%' name = 'stocks'></td>";
-				table += "		<td><input type='number' step='0.01' width = '10%' name = 'total_price'></td>";
+				table += "		<td><input type='number' width = '10%' name = 'salesid' placeholder = 'Sale Id'></td>";
+				table += "		<td><input type='date' width = '10%' name = 'date' placeholder = 'Date'></td>";
+				table += "		<td><input type='text' width = '10%' name = 'itemid' placeholder = 'Item Id'></td>";
+				table += "		<td><input type='text' width = '10%' name = 'name'placeholder = 'Name'></td>";
+				table += "		<td><input type='number' step='0.01' width = '10%' name = 'price_per_product' placeholder = 'Price Per Product'></td>";
+				table += "		<td><input type='number' width = '10%' name = 'stocks' placeholder = 'Stocks'></td>";
+				table += "		<td><input type='number' step='0.01' width = '10%' name = 'total_price' placeholder = 'Total Price'></td>";
+				table += "		<td><button name = 'submit_insert' id = 'submit' onClick = 'refreshPage()'>Submit</button></td>";
 				table += "	</tr>";
 				table += "</table>";
-				table += "<button name = 'submit_insert' id = 'submit' onClick = 'refreshPage()'>Submit</button>";
 				table += "<input type='hidden' name = 'submit_message' id = 'submit_message' value = 'No'>";
 				table += "<input type='hidden' name = 'message' id = 'message' value = 'Update'>";
 				table += "</form>";
@@ -120,18 +111,22 @@
 			document.getElementById("demo").innerHTML = table;
 		}
 
+		function revertButtonColors(){
+			document.getElementById("insert").style.backgroundColor = 'rgb(70, 64, 160)';
+			document.getElementById("update").style.backgroundColor = 'rgb(70, 64, 160)';
+			document.getElementById("delete").style.backgroundColor = 'rgb(70, 64, 160)';
+		}
+
 		function deleteFunction() {
+			revertButtonColors();
+			document.getElementById("delete").style.backgroundColor = 'rgb(17, 11, 104)';
 			var table = "<form action='' method = 'POST'>";
-				table += "<label name = 'delete' value = 'delete hahaha'><h2>DELETE SALES</h2></label>";
 				table += "<table>";
 				table += "	<tr>";
-				table += "		<th class = '' width = '10%' style = 'text-align: left;'>SalesId</th>";
-				table += "	</tr>";
-				table += "	<tr>";
-				table += "		<td><input type='text' width = '10%' name = 'salesid'></td>";
+				table += "		<td><input type='text' width = '10%' name = 'salesid' placeholder = 'Sale Id'></td>";
+				table += "		<td><button name = 'submit_delete' id = 'submit' onClick = 'refreshPage()'>Submit</button></td>";
 				table += "	</tr>";
 				table += "</table>";
-				table += "<button name = 'submit_delete' id = 'submit' onClick = 'refreshPage()' >Submit</button>";
 				table += "<input type='hidden' name = 'message' id = 'message' value = 'Update'>";
 				table += "<input type='hidden' name = 'submit_message' id = 'submit_message' value = 'No'>";
 				table += "</form>";
@@ -146,7 +141,6 @@
 	<?php
 		$message = $_POST['message'];
 		$submit_message = $_POST['submit_message'];
-		echo "ehhh shsh".$message."";
 		
 		$salesId = $_POST['salesid'];
 		$date = $_POST['date'];
@@ -158,8 +152,8 @@
 		$insert = $_POST['insert'];
 		$delete = $_POST['delete'];
 
-		//require_once "settings.php";	// Load MySQL log in credentials
-		$conn = @mysqli_connect ("localhost","root","root","login");	// Log in and use database
+		require "Credentials.php";
+    	$conn = new mysqli($host, $user, $password, $db);	// Log in and use database
 		if ($conn) { // check is database is avialable for use
 			
 			if($message == "Insert"){

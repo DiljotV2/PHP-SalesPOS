@@ -33,7 +33,8 @@
     <h1>NEWSLETTER</h1>
     <?php
 
-        $mysqli = new mysqli("localhost","root","root","login");
+        require "Credentials.php";
+        $mysqli = new mysqli($host, $user, $password, $db);
 
         // Check connection
         if ($mysqli -> connect_errno) {

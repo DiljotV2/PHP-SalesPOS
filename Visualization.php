@@ -42,8 +42,8 @@
     <!--</form>-->
     <?php
         //echo "Php being used??";
-        //it is used for creating a dictionary
-        $conn = @mysqli_connect ("localhost","root","root","login");	// Log in and use database
+        require "Credentials.php";
+        $conn = new mysqli($host, $user, $password, $db);	// Log in and use database
 	if ($conn) { // check is database is avialable for use
 		$query = "Select * from salesdata";		// query is assigned here
 		$result = mysqli_query ($conn, $query);
