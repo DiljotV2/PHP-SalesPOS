@@ -82,7 +82,7 @@
     <div class = "background">
         <div class = "board">
             <div class = "WelcomeTitle">
-                <img id = "logo" src="" alt="Logo" width = "5%" height = "5%">
+                <img id = "logo" src="Images/Logo.png" alt="Logo" width = "75%" height = "130%">
                 <h2>WELCOME TO PHP SALES POS</h2>
                 <h4>Please login to your account</h4>
             </div>
