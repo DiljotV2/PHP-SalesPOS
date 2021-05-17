@@ -5,17 +5,23 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Report</title>
+	<link href="ReportDesign.css" rel="stylesheet" />
+
 </head>
 <body>
      <header>
         <h2>
+        
             <nav>
-                <a href = "/Dashboard.php" id = "dashboard">Dashboard</a>
-                <a href = "/Sales.php" id = "sales">Sales</a>
-                <a href = "/Inventory.php" id = "inventory">Inventory</a>
-                <a href = "/Visualization.php" id = "visualization">Visualization</a>
-                <a href = "/Report.php" id = "reports">Reports</a>
-	        </nav>
+                <div class = "links">
+                    <a href = "/Dashboard.php" id = "dashboard" class = "navLinks">Dashboard</a>
+                    <a href = "/Sales.php" id = "sales"  class = "navLinks">Sales</a>
+                    <a href = "/Inventory.php" id = "inventory"  class = "navLinks">Inventory</a>
+                    <a href = "/Visualization.php" id = "visualization"  class = "navLinks">Visualization</a>
+                    <a href = "/Report.php" id = "reports"  class = "navLinks">Reports</a>
+                
+                </div>
+            </nav>
         </h2>
     <header>
     <h1>REPORTS</h1>
@@ -91,9 +97,9 @@ class PDF extends FPDF
         $this->SetX(10);
 
         // Colors, line width and bold font
-        $this->SetFillColor(255,0,0);
+        $this->SetFillColor(17, 11, 104);
         $this->SetTextColor(255);
-        $this->SetDrawColor(128,0,0);
+        $this->SetDrawColor(17, 11, 104);
         $this->SetLineWidth(.3);
         $this->SetFont('','B');
         // Header
@@ -128,7 +134,7 @@ class PDF extends FPDF
 $pdf = new PDF();
 $pdf->AliasNbPages();
 $pdf->AddPage();
-$pdf->SetFont('Times','',12);
+$pdf->SetFont('Arial','',12);
 $salesHeader = array("SaleID","Date", "ItemID", "Name", "Price Per Product", "Stocks", "Total Price");
 $salesData = $pdf->loadData();
 $pdf->FancyTable($salesHeader, $salesData);
@@ -138,15 +144,15 @@ $pdf->FancyTable($salesHeader, $salesData);
 $output = $pdf->Output('', 'S');
 $output = base64_encode($output);
 ?>
-<select name="year" id="year">
+<select name="year" id="year" class = "category">
         <option value="2021">2021</option>
     </select>
 
-    <select name="month" id="month">
+    <select name="month" id="month" class = "category">
         <!--<option value="January">January</option>
         <option value="February">February</option>
-        <option value="March">March</option>-->
-        <option value="April">April</option>
+        <option value="March">March</option>
+        <option value="April">April</option>-->
         <option value="May">May</option>
         <!--<option value="June">June</option>
         <option value="July">July</option>
@@ -157,18 +163,13 @@ $output = base64_encode($output);
         <option value="December">December</option>-->
     </select>
 
-    <button id = "button" onClick = "downloadReport()"> Download</button>
-    <p id = "demo"></p>
-    <p id = "demo_err"></p>
+    <button id = "button" onClick = "downloadReport()" class = "category"> Download</button>
+   
+    
     <script>
         function downloadReport(){
-            try{
-                var downloadFile = '<embed src="https://php-sale.s3.amazonaws.com/2021/" >';
-
-            }
-            catch(err){
-                document.getElementById("demo_err").innerHTML = "This is the error: " + err.message + "\n";
-            }
+            
+                var downloadFile = '<embed src="https://php-sale.s3.amazonaws.com/2021/May.pdf" >';
 			    document.getElementById("demo").innerHTML = downloadFile;
             
         }
@@ -176,5 +177,6 @@ $output = base64_encode($output);
     <div class = "container"  >
         <embed src="data:application/pdf;base64,<?php echo $output ?>" type='application/pdf' style = 'margin: auto;' width = "70%" height = "600px">
     </div>
+     <p id = "demo"></p>
 </body>
 </html>
