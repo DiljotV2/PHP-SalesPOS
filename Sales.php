@@ -91,7 +91,7 @@
 		function updateFunction() {
 			revertButtonColors();
 			document.getElementById("update").style.backgroundColor = 'rgb(17, 11, 104)';
-			var table = "<form action='' method = 'POST'>";
+			var table = "<form action='#' method = 'POST'>";
 				table += "<table>";
 				table += "	<tr>";
 				table += "		<td><input type='number' width = '10%' name = 'salesid' placeholder = 'Sale Id'></td>";
@@ -127,7 +127,7 @@
 				table += "		<td><button name = 'submit_delete' id = 'submit' onClick = 'refreshPage()'>Submit</button></td>";
 				table += "	</tr>";
 				table += "</table>";
-				table += "<input type='hidden' name = 'message' id = 'message' value = 'Update'>";
+				table += "<input type='hidden' name = 'message' id = 'message' value = 'Delete'>";
 				table += "<input type='hidden' name = 'submit_message' id = 'submit_message' value = 'No'>";
 				table += "</form>";
 
@@ -176,7 +176,8 @@
 
 			if($submit_message == "Yes")
 			{
-				header("refresh:0.5; url=Sales.php");		
+				echo "<meta http-equiv='refresh' content='0.5'>";
+
 			}
 			
 			mysqli_close ($conn);					// Close the database connect
@@ -185,6 +186,9 @@
 		}
 	
 	?>
-	
+	<script type="text/javascript">
+document.write(Math.random());
+</script>
+
 </body>
 </html>

@@ -163,7 +163,8 @@
 
 			if($submit_message == "Yes")
 			{
-				header("refresh:0.5; url=Inventory.php");		
+				echo "<meta http-equiv='refresh' content='0.5'>";
+	
 			}
 			
 			mysqli_close ($conn);					// Close the database connect
