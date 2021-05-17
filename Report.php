@@ -138,7 +138,41 @@ $pdf->FancyTable($salesHeader, $salesData);
 $output = $pdf->Output('', 'S');
 $output = base64_encode($output);
 ?>
+<select name="year" id="year">
+        <option value="2021">2021</option>
+    </select>
 
+    <select name="month" id="month">
+        <!--<option value="January">January</option>
+        <option value="February">February</option>
+        <option value="March">March</option>-->
+        <option value="April">April</option>
+        <option value="May">May</option>
+        <!--<option value="June">June</option>
+        <option value="July">July</option>
+        <option value="August">August</option>
+        <option value="September">September</option>
+        <option value="October">October</option>
+        <option value="November">November</option>
+        <option value="December">December</option>-->
+    </select>
+
+    <button id = "button" onClick = "downloadReport()"> Download</button>
+    <p id = "demo"></p>
+    <p id = "demo_err"></p>
+    <script>
+        function downloadReport(){
+            try{
+                var downloadFile = '<embed src="https://php-sale.s3.amazonaws.com/2021/" >';
+
+            }
+            catch(err){
+                document.getElementById("demo_err").innerHTML = "This is the error: " + err.message + "\n";
+            }
+			    document.getElementById("demo").innerHTML = downloadFile;
+            
+        }
+    </script>
     <div class = "container"  >
         <embed src="data:application/pdf;base64,<?php echo $output ?>" type='application/pdf' style = 'margin: auto;' width = "70%" height = "600px">
     </div>
